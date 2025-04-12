@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Accessibility Score Chart</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="https://code.highcharts.com/highcharts.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 40px;
+      background: #f8f9fa;
+    }
+    h2 {
+      text-align: center;
+      color: #800000;
+    }
+    #scoreChart {
+      width: 100%;
+      max-width: 800px;
+      margin: 40px auto;
+    }
+  </style>
+</head>
+<body>
+
+<h2>Accessibility Score Distribution of TAMU Buildings</h2>
+<div id="scoreChart"></div>
+
+<script>
+Highcharts.chart('scoreChart', {
+  chart: {
+    type: 'column'
+  },
+  title: {
+    text: 'Number of Buildings by Accessibility Score'
+  },
+  xAxis: {
+    categories: ['Poor (>750m)', 'Moderate (≤750m)', 'Good (≤500m)', 'Very Good (≤250m)', 'Excellent (≤100m)'],
+    title: { text: 'Accessibility Score Categories' }
+  },
+  yAxis: {
+    min: 0,
+    title: { text: 'Number of Buildings' }
+  },
+  tooltip: {
+    pointFormat: '<b>{point.y} buildings</b>'
+  },
+  plotOptions: {
+    column: {
+      dataLabels: {
+        enabled: true,
+        format: '{y}'
+      }
+    }
+  },
+  colors: ['#edf8e9', '#bae4b3', '#74c476', '#31a354', '#006d2c'],
+  series: [{
+    name: 'Buildings',
+    data: [480, 124, 91, 125, 74]
+  }]
+});
+</script>
+
+</body>
+</html>

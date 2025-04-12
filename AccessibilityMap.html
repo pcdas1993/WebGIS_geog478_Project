@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Accessibility Map</title>
+
+  <!-- Leaflet + Turf -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/@turf/turf@6.5.0/turf.min.js"></script>
+  <script src="tamubuildings.js"></script> 
+
+  <style>
+    html, body { margin: 0; padding: 0; height: 100%; font-family: Arial, sans-serif; }
+    nav {
+      background-color: #800000;
+      padding: 12px;
+      text-align: center;
+    }
+    nav a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      margin: 0 20px;
+    }
+    nav a:hover {
+      text-decoration: underline;
+    }
+    #map {
+      height: calc(100vh - 100px);
+      width: 100%;
+    }
+    .legend, .download-btn {
+      position: absolute;
+      z-index: 1000;
+      background: white;
+      padding: 10px;
+      border-radius: 5px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.2);
+      font-size: 13px;
+    }
+    .legend {
+      bottom: 10px;
+      left: 10px;
+      line-height: 1.5;
+    }
+    .legend div {
+      margin-bottom: 5px;
+    }
+    .legend span {
+      display: inline-block;
+      width: 18px;
+      height: 18px;
+      margin-right: 6px;
+      vertical-align: middle;
+    }
+    .download-btn {
+      bottom: 10px;
+      right: 10px;
+      background-color: #800000;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html">Dashboard</a>
+  <a href="feedback.html">Your Feedback</a>
+</nav>
+
+<div id="map"></div>
+
+<!-- Legend and Export -->
+<div class="legend">
+  <strong>Accessibility Score Legend</strong>
+  <div><span style="background:#006d2c;"></span> 100 – Excellent (≤100m)</div>
+  <div><span style="background:#31a354;"></span> 80 – Very Good (≤250m)</div>
+  <div><span style="background:#74c476;"></span> 60 – Good (≤500m)</div>
+  <div><span style="background:#bae4b3;"></span> 40 – Moderate (≤750m)</div>
+  <div><span style="background:#edf8e9;"></span> 20 or less – Poor (>750m)</div>
+</div>
+
+<div class="download-btn" onclick="exportToCSV()">⬇️ Export Scores</div>
+
+<script>
+  const map = L.map('map').setView([30.6136, -96.3411], 16);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; OpenStreetMap contributors'
+  }).addTo(map);
+
+  const pocketPantries = [
+    [30.61578, -96.34078], [30.61545, -96.34379], [30.61776, -96.34022],
+    [30.61872, -96.33782], [30.60205, -96.35380], [30.61745, -96.34177],
+    [30.61688, -96.34295], [30.61688, -96.33795], [30.61222, -96.33959],
+    [30.61566, -96.34273], [30.61685, -96.33938], [30.61167, -96.35717],
+    [30.61496, -96.34056], [30.61474, -96.33988], [30.61682, -96.33802],
+    [30.61045, -96.35089], [30.59858, -96.39596], [30.61535, -96.33604],
+    [30.61055, -96.33997], [30.61221, -96.34503], [30.61055, -96.33467],
+    [30.61663, -96.34075], [30.61956, -96.34218], [30.61240, -96.34162],
+    [30.61059, -96.34738], [30.61685, -96.33799], [30.61819, -96.34458],
+    [30.61131, -96.35219], [30.61871, -96.33648]
+  ];
+
+  // Fixing lat/lng -> GeoJSON (lng, lat)
+  const pantryPoints = turf.featureCollection(
+    pocketPantries.map(coords => turf.point([coords[1], coords[0]]))
+  );
+
+  function getAccessibilityScore(dist) {
+    if (dist <= 100) return 100;
+    if (dist <= 250) return 80;
+    if (dist <= 500) return 60;
+    if (dist <= 750) return 40;
+    if (dist <= 1000) return 20;
+    return 10;
+  }
+
+  function getColor(score) {
+    return score >= 100 ? '#006d2c' :
+           score >= 80  ? '#31a354' :
+           score >= 60  ? '#74c476' :
+           score >= 40  ? '#bae4b3' :
+                          '#edf8e9';
+  }
+
+  const buildingData = [];
+
+  L.geoJSON(tamu, {
+    onEachFeature: function(feature, layer) {
+      try {
+        const centroid = turf.centroid(feature);
+        const nearest = turf.nearestPoint(centroid, pantryPoints);
+        const distance = turf.distance(centroid, nearest, { units: 'meters' });
+        const score = getAccessibilityScore(distance);
+        const name = feature.properties.BldgName || 'Unnamed Building';
+
+        layer.setStyle({
+          fillColor: getColor(score),
+          fillOpacity: 0.7,
+          color: '#333',
+          weight: 1
+        });
+
+        layer.bindPopup(`<strong>${name}</strong><br>
+                         Distance to pantry: ${distance.toFixed(1)} m<br>
+                         Accessibility Score: <b>${score}</b>/100`);
+
+        buildingData.push({
+          name: name,
+          distance: distance.toFixed(1),
+          score: score
+        });
+      } catch (err) {
+        console.warn("Error with building:", feature, err);
+      }
+    }
+  }).addTo(map);
+
+  function exportToCSV() {
+    const header = "Building Name,Distance (m),Accessibility Score\n";
+    const rows = buildingData.map(d => `"${d.name}",${d.distance},${d.score}`).join("\n");
+    const csv = header + rows;
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.setAttribute("download", "Accessibility_Scores.csv");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+</script>
+
+</body>
+</html>

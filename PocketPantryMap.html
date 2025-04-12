@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Pocket Pantry Map</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Leaflet Core -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <!-- Leaflet.heat Plugin -->
+  <script src="https://unpkg.com/leaflet.heat/dist/leaflet-heat.js"></script>
+
+  <style>
+    body,
+    html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+    }
+
+    nav {
+      background-color: #800000;
+      padding: 10px;
+      text-align: center;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      margin: 0 15px;
+      font-weight: bold;
+    }
+
+    nav a:hover {
+      text-decoration: underline;
+    }
+
+    #map {
+      height: calc(100vh - 50px);
+      width: 100%;
+    }
+  </style>
+</head>
+
+<body>
+
+  <nav>
+    <a href="index.html">Dashboard</a>
+    <a href="feedback.html">Your Feedback</a>
+  </nav>
+
+  <div id="map"></div>
+
+  <script>
+    var map = L.map('map').setView([30.609972, -96.340168], 13);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    var greenIcon = new L.Icon({ iconUrl: 'https://maps.google.com/mapfiles/ms/icons/green-dot.png', iconSize: [32, 32], iconAnchor: [16, 32] });
+    var blueIcon = new L.Icon({ iconUrl: 'https://maps.google.com/mapfiles/ms/icons/blue-dot.png', iconSize: [32, 32], iconAnchor: [16, 32] });
+    var redIcon = new L.Icon({ iconUrl: 'https://maps.google.com/mapfiles/ms/icons/red-dot.png', iconSize: [32, 32], iconAnchor: [16, 32] });
+
+    // Pantry data
+    var AllStudents = [
+      { coords: [30.61578, -96.34078], name: "Academic Operations Study Abroad - Academic Building", description: "Located in Room 228, serving all students." },
+      { coords: [30.61578, -96.34078], name: "Aggie TEACH - Academic Building", description: "Located in Room 227, serving all students." },
+      { coords: [30.61545, -96.34379], name: "Campus Ministry Association - All Faith's Chapel", description: "Serving all students." },
+      { coords: [30.61776, -96.34022], name: "Chemistry Department - Chemistry Building", description: "Located in Room 2109" },
+      { coords: [30.61872, -96.33782], name: "College of Architecture - Langford Center Building A", description: "Located in Room 202, serving all students." },
+      { coords: [30.61578, -96.34078], name: "College of Arts and Sciences - Academic Building", description: "Located in Room 107, serving all students." },
+      { coords: [30.61872, -96.33782], name: "Department of English - Liberal Arts and Humanities Building", description: "Located in Room 323, serving all students." },
+      { coords: [30.60205, -96.35380], name: "Economics Department - West Campus Social Sciences Building", description: "Serving all students." },
+      { coords: [30.61745, -96.34177], name: "MSC Programs - MSC", description: "Located in Room 2240, serving all students." },
+      { coords: [30.61688, -96.34295], name: "Psychological and Brain Sciences - Milner Hall", description: "Located in Room 214, serving all students." },
+      { coords: [30.61688, -96.33795], name: "School of Performance, Visualization, and Fine Arts - Pavillion", description: "Located in Room 205, serving all students." },
+      { coords: [30.61222, -96.33959], name: "Student Activities - Koldus Building", description: "Located in Room 127D, serving all students." },
+      { coords: [30.61222, -96.33959], name: "Student Life - Student Services Building", description: "Located in Room 209, serving all students." },
+      { coords: [30.61566, -96.34273], name: "University Health Services - Beutel Health Center", description: "Located in the basement across from Room 005, serving all students." },
+      { coords: [30.61685, -96.33938], name: "University Writing Services - Evans Library", description: "Located in the Room 1.214, serving all students." }
+    ];
+
+    var OtherStu = [
+      { coords: [30.61167, -96.35717], name: "Veterinary Medicine & Biomedical Sciences: Research & Grad Students - Veterinary Medicine Building I", description: "Located in Room 317M, serving all BIMS Graduate & Professional students." },
+      { coords: [30.61496, -96.34056], name: "Graduate and Professional School - Nagle Hall", description: "Located in Room 105, serving graduate students." },
+      { coords: [30.61474, -96.33988], name: "Department of Psychological & Brain Sciences - Psychology Building", description: "Located in Room 4235, serving graduate Students in Psychology and Brain Sciences." },
+      { coords: [30.61682, -96.33802], name: "International Student & Scholar Services - Pavilion", description: "Located in Room 110, serving International students, International scholars, and families attached to those groups." },
+      { coords: [30.61045, -96.35089], name: "Mays Business School - Undergraduate Programs - Wehner Building", description: "Located in Room 239, serving Mays Business students." },
+      { coords: [30.598584, -96.395961], name: "College of Nursing - Health Science Center", description: "Serving nursing students." },
+      { coords: [30.61535, -96.33604], name: "Residence Life - Commons", description: "Located at the 24-hr desk, serving on-campus residents." },
+      { coords: [30.61055, -96.33997], name: "Residence Life - White Creek Apartments", description: "Located at Activity Center, serving on-campus residents." },
+      { coords: [30.61221, -96.34503], name: "Residence Life - The Gardens Apartments", description: "Located at the Community Center, serving on-campus residents." },
+      { coords: [30.61055, -96.33467], name: "Residence Life - Hullabaloo Hall", description: "Located at the 24-hr Desk for on-campus residents." },
+      { coords: [30.61663, -96.34075], name: "School of Education & Human Development - Harrington Tower", description: "Located in Room 570, serving SEHD Undergraduate & Graduates." },
+      { coords: [30.61956, -96.34218], name: "Blocker Advising Center - Blocker Building", description: "Located in Room 529, serving STAT , MATH, PHYS, & CHEM students." },
+      { coords: [30.61240, -96.34162], name: "Don & Ellie Knauss VRSC - MSC", description: "Located in Room 1507, serving Student veterans & military-affiliated students." },
+      { coords: [30.61059, -96.34738], name: "COALS Student Success Team - Kleberg Building", description: "Located in Room 109, serving Students, faculty, staff in College of AGLS." }
+    ];
+
+    var VariesPan = [
+      { coords: [30.61685, -96.33799], name: "Academic Success Center - Pavillion", description: "Located in Room 236, serving varies." },
+      { coords: [30.61819, -96.34458], name: "Office for Student Success - Hotard Hall", description: "Serving varies." },
+      { coords: [30.61131, -96.35219], name: "School of Pharmacy - Reynolds Medical Sciences Building", description: "Located in Room 356, serving varies." },
+      { coords: [30.61871, -96.33648], name: "School of Public Health - Administration Building", description: "Located at the 1st Floor Breezeway, between rooms 155A and 1R, serving varies." },
+      { coords: [30.61167, -96.35717], name: "Veterinary Medicine & Biomedical Sciences: Dean's Office - Veterinary Medicine Building I", description: "Under 1st Floor Stairwell 317 M - Serving varies" }
+    ];
+
+    var allLayer = L.layerGroup();
+    var otherLayer = L.layerGroup();
+    var variesLayer = L.layerGroup();
+
+    AllStudents.forEach(p => {
+      var marker = L.marker(p.coords, { icon: greenIcon }).bindPopup(`<b>${p.name}</b><br>${p.description}`);
+      allLayer.addLayer(marker);
+    });
+
+    OtherStu.forEach(p => {
+      var marker = L.marker(p.coords, { icon: blueIcon }).bindPopup(`<b>${p.name}</b><br>${p.description}`);
+      otherLayer.addLayer(marker);
+    });
+
+    VariesPan.forEach(p => {
+      var marker = L.marker(p.coords, { icon: redIcon }).bindPopup(`<b>${p.name}</b><br>${p.description}`);
+      variesLayer.addLayer(marker);
+    });
+
+    allLayer.addTo(map);
+    otherLayer.addTo(map);
+    variesLayer.addTo(map);
+
+    var heatData = [].concat(
+      AllStudents.map(p => p.coords),
+      OtherStu.map(p => p.coords),
+      VariesPan.map(p => p.coords)
+    );
+
+    var heatLayer = L.heatLayer(heatData, {
+      radius: 25,
+      blur: 15,
+      maxZoom: 17
+    }).addTo(map);
+
+    L.control.layers(null, {
+      "All Students (Green)": allLayer,
+      "Other Students (Blue)": otherLayer,
+      "Varies (Red)": variesLayer,
+      "Heatmap": heatLayer
+    }).addTo(map);
+
+    map.on('locationfound', function (e) {
+      var radius = e.accuracy / 10;
+      L.marker(e.latlng).bindPopup("You are here").addTo(map).openPopup();
+      L.circle(e.latlng, radius).addTo(map);
+    });
+
+    map.on('locationerror', function (e) {
+      alert(e.message);
+    });
+
+    map.locate({ setView: true, maxZoom: 16 });
+  </script>
+
+</body>
+
+</html>

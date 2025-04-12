@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Give Your Feedback</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #800000;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        nav {
+            background-color: #800000;
+            padding: 10px;
+            text-align: center;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+        }
+        main {
+            max-width: 600px;
+            margin: 30px auto;
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+        label {
+            display: block;
+            margin: 15px 0 5px;
+        }
+        textarea, select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            background-color: #800000;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #9a1e1e;
+        }
+        #thank-you {
+            display: none;
+            text-align: center;
+            color: green;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>We Value Your Feedback</h1>
+</header>
+
+<nav>
+    <a href="index.html">Dashboard</a>
+    <a href="PocketPantryMap.html">Map</a>
+</nav>
+
+<main>
+    <form id="feedback-form">
+        <label for="experience">Was this page helpful?</label>
+        <select id="experience" name="experience" required>
+            <option value="">-- Choose an option --</option>
+            <option value="Yes">Yes</option>
+            <option value="Somewhat">Somewhat</option>
+            <option value="No">No</option>
+        </select>
+
+        <label for="comments">How can we improve?</label>
+        <textarea id="comments" name="comments" rows="5" required></textarea>
+
+        <button type="submit">Submit Feedback</button>
+    </form>
+
+    <div id="thank-you">
+        Thank you for your feedback!
+    </div>
+</main>
+
+<script>
+    document.getElementById("feedback-form").addEventListener("submit", function(e) {
+        e.preventDefault();
+        document.getElementById("feedback-form").style.display = "none";
+        document.getElementById("thank-you").style.display = "block";
+    });
+</script>
+
+</body>
+</html>
