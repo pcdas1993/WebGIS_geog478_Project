@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pocket Pantries</title>
+
+  <!-- Highcharts -->
+  <script src="https://code.highcharts.com/highcharts.js"></script>
+
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f9;
+      color: #333;
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 0 15px;
+    }
+
+    #main-title {
+      font-size: 2rem;
+      color: #800000;
+      text-align: center;
+      margin-top: 30px;
+      font-weight: 700;
+    }
+
+    nav {
+      background-color: #800000;
+      padding: 12px 0;
+      text-align: center;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    nav a {
+      color: #ffffff;
+      text-decoration: none;
+      margin: 0 20px;
+      font-weight: 500;
+      font-size: 1.1rem;
+      transition: color 0.3s;
+    }
+
+    nav a:hover {
+      text-decoration: underline;
+      color: #ffdddd;
+    }
+
+    #image-container {
+      display: flex;
+      justify-content: center;
+      margin: 30px 0;
+    }
+
+    #image-container img {
+      width: 100%;
+      max-width: 300px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    p {
+      text-align: justify;
+      margin: 15px 0;
+      font-size: 1rem;
+    }
+
+    h3 {
+      color: #800000;
+      margin-top: 30px;
+    }
+
+    ul {
+      list-style-type: none;
+      padding: 0;
+    }
+
+    ul a {
+      display: inline-block;
+      margin: 15px 0;
+      padding: 12px 20px;
+      background-color: #800000;
+      color: #fff;
+      text-decoration: none;
+      font-weight: bold;
+      border-radius: 6px;
+      transition: background-color 0.3s;
+    }
+
+    a:hover {
+      color: #9a1e1e;
+    }
+
+    ul a:hover {
+      background-color: #9a1e1e;
+    }
+
+    li {
+      font-size: 1rem;
+      margin: 10px 0;
+    }
+
+    #pie-chart-container {
+      margin-top: 40px;
+    }
+
+    section {
+      background-color: #fff;
+      padding: 25px;
+      margin: 30px 0;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    }
+
+    section h2,
+    section h3 {
+      text-align: left;
+      color: #333;
+    }
+
+    details summary {
+      cursor: pointer;
+      font-weight: bold;
+      color: #800000;
+      margin: 10px 0;
+    }
+
+    footer {
+      text-align: center;
+      padding: 15px 0;
+      background-color: #800000;
+      color: #fff;
+      font-size: 0.9rem;
+      margin-top: 40px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-family: 'Segoe UI', sans-serif;
+      margin-top: 30px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      background-color: #fff;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    table thead th {
+      background-color: #800000;
+      /* TAMU maroon */
+      color: white;
+      padding: 12px;
+      text-align: left;
+      font-size: 1.1rem;
+    }
+
+    table tbody tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+
+    table tbody tr:hover {
+      background-color: #f1f1f1;
+    }
+
+    table td,
+    table th {
+      padding: 12px 15px;
+      border-bottom: 1px solid #ddd;
+      vertical-align: top;
+    }
+
+    table a {
+      color: #800000;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    table a:hover {
+      text-decoration: underline;
+    }
+
+    h4 {
+      margin: 0;
+  </style>
+</head>
+
+<body>
+  <header class="container">
+    <h1 id="main-title">Campus Pocket Pantries: Enhancing Food Accessibility at Texas A&M University</h1>
+  </header>
+
+  <div class="container">
+    <nav>
+      <a href="PocketPantryMap.html">Map</a>
+      <a href="#pie-chart-container">Visualization</a>
+      <a href="AccessibilityMap.html">Accessibility</a>
+      <a href="feedback.html">Your Feedback</a>
+    </nav>
+  </div>
+
+  <main class="container">
+    <div id="image-container">
+      <img src="Pocket-Pantry.webp" alt="Pocket Pantry Image" />
+    </div>
+
+    <h2>Background: Food Insecurity at Texas A&M</h2>
+    <p>
+      Food insecurity, defined as limited or uncertain access to adequate food, is a growing concern among college
+      students nationwide.
+      At Texas A&M, research has shown that nearly <strong>1 in 2 undergraduates</strong> experiences some level of food
+      insecurity during the semester.
+      This includes skipping meals, worrying about running out of food, or not being able to afford balanced meals.
+    </p>
+    <div
+      style="background-color: #fff8f8; border-left: 5px solid #800000; border-right: 5px solid #800000; padding: 15px; margin: 20px 0; border-radius: 8px;">
+      <p>
+        According to the 2021 SERU Report, <strong>38% of TAMU undergraduates</strong> reported being worried their food
+        would run out, and
+        <strong>19%</strong> couldn’t afford to eat balanced meals.
+        This is a significant issue that can impact academic performance, mental health, and overall well-being.
+      </p>
+    </div>
+    <p>
+      As of 2024, Texas A&M's Student Division of Affairs Office will recieve $1.1 million for the next 10 years to
+      combat food insecurity.
+      The univeristy has pledged to allocate $50,000 to the pocket pantries program which will ensure the pantries
+      remain stocked year-round.
+      This funding will increase resources for all food accessibility programs on campus as well as support new
+      projects.
+    </p>
+    <h2>Why Pocket Pantries Matter</h2>
+
+    <p>
+      The Pocket Pantry program provides temporary relief to Texas A&M students experiencing food insecurity by
+      offering immediate access to non-perishable food and toiletries, while also directing them to additional on-campus
+      resources.
+    </p>
+    <ul style="list-style-type: disc; margin-left: 20px;">
+      <li>They reduce stigma by providing easy, self-serve access to food and toiletries.</li>
+      <li>They are located in familiar academic or student support buildings, reducing travel burden.</li>
+      <li>They help support academic success, mental health, and student retention.</li>
+    </ul>
+    <p>There are currently <strong>29</strong> Pocket Pantry locations distributed across campus. With annual funding,
+      these locations
+      remain stocked throughout the academic year to support students in need.</p>
+
+    <h2>About TAMU Pocket Pantries</h2>
+    <div id="image-container">
+      <img src="PPimage.png" alt="Pocket Pantry Marker Icon" style="width: 500px; height: auto;" />
+    </div>
+    
+    <p>This project also analyzes pantry accessibility by computing the walking distance from each building to the
+      nearest pantry, assigning a score from 10 to 100 to measure how easily students can access these resources.</p>
+
+    <p> <strong>Complete List of Pocket Pantries by Department:</strong></p>
+    <div style="max-height: 500px; overflow-y: auto; overflow-x: auto; border: 1px solid #ddd; border-radius: 8px;">
+      <table style="width: 1200px; height: 420px;">
+        <thead style="position: sticky; top: 0; background-color: #800000; color: white; z-index: 1;">
+          <tr>
+            <th>
+              <h4>Department</h4>
+            </th>
+            <th>
+              <h4>Building</h4>
+            </th>
+            <th>
+              <h4>Room/Suite</h4>
+            </th>
+            <th>
+              <h4>Students Served</h4>
+            </th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr>
+            <td>Academic Operations Study Abroad</td>
+            <td><a href="https://aggiemap.tamu.edu/?bldg=0462">Academic Building</a></td>
+            <td>228</td>
+            <td>All students</td>
+          </tr>
+          <tr>
+            <td>Academic Success Center</td>
+            <td><a href="https://aggiemap.tamu.edu/?bldg=0471">Pavilion</a></td>
+            <td>Suite 236</td>
+            <td>Varies</td>
+          </tr>
+          <tr>
+            <td>Aggie TEACH</td>
+            <td><a href="https://aggiemap.tamu.edu/?bldg=0462">Academic Building</a></td>
+            <td>227</td>
+            <td>All students</td>
+          </tr>
+          <tr>
+            <td>Blocker Advising Center</td>
+            <td><a href="https://aggiemap.tamu.edu/?bldg=0524">Blocker</a></td>
+            <td>529</td>
+            <td>STAT , MATH, PHYS, &amp; CHEM students</td>
+          </tr>
+          <tr>
+            <td>Campus Ministry Association</td>
+            <td><a href="https://aggiemap.tamu.edu/map/d?bldg=0512">All Faith's Chapel</a></td>
+            <td></td>
+            <td>All students</td>
+          </tr>
+          <tr>
+            <td>Chemistry Department</td>
+            <td><a href="https://aggiemap.tamu.edu/?bldg=0484">CHEM</a></td>
+            <td>2109</td>
+            <td>All students</td>
+          </tr>
+          <tr>
+            <td>COALS Student Success Team</td>
+            <td><a href="https://aggiemap.tamu.edu/?bldg=1501">Kleberg</a></td>
+            <td>109</td>
+            <td>Students, faculty, staff in College of AGLS</td>
+          </tr>
+          <tr>
+            <td>College of Architecture</td>
+            <td><a href="https://aggiemap.tamu.edu/?bldg=0398">Langford A</a></td>
+            <td>Suite 202</td>
+            <td>All students</td>
+          </tr>
+          <tr>
+            <td>College of Arts and Sciences</td>
+            <td><a href="https://aggiemap.tamu.edu/?bldg=0462" target="_blank" rel="noopener">Academic Building</a>
+            </td>
+            <td>Suite 107</td>
+            <td>All students</td>
+          </tr>
+          <tr>
+            <td>College of Nursing</td>
+            <td>Health Science Center</td>
+            <td></td>
+            <td>Nursing students</td>
+          </tr>
+          <tr>
+            <td>Department of English</td>
+            <td><a href="https://aggiemap.tamu.edu/?bldg=0275">LAAH</a></td>
+            <td>323</td>
+            <td>All students</td>
+          </tr>
+          <tr>
+            <td>Department of Psychological &amp; Brain Sciences</td>
+            <td><a href="https://aggiemap.tamu.edu/?bldg=0463">Psychology Building </a></td>
+            <td>4235</td>
+            <td>Graduate Students in Psychology and Brain Sciences</td>
+          </tr>
+          <tr>
+            <td>Don &amp; Ellie Knauss Veterans Resource &amp; Support Center (VRSC)</td>
+            <td><a href="https://aggiemap.tamu.edu/?bldg=0454" target="_blank" rel="noopener">Memorial Student
+                Center</a>
+            </td>
+            <td>1507</td>
+            <td>Student veterans &amp; military-affiliated students (active duty, Reserves, National Guard, spouses
+              &amp;
+              dependents)</td>
+          </tr>
+          <tr>
+            <td>Economics Department</td>
+            <td><a href="https://aggiemap.tamu.edu/?bldg=1609">WCSS</a></td>
+            <td></td>
+            <td>All students</td>
+          </tr>
+          <tr>
+            <td>Graduate and Professional School</td>
+            <td><a href="https://aggiemap.tamu.edu/?bldg=0506">Nagle Hall</a></td>
+            <td>105</td>
+            <td>Graduate Students</td>
+          </tr>
+          <tr>
+            <td>International Student &amp; Scholar Services</td>
+            <td><a href="https://aggiemap.tamu.edu/?bldg=0471" target="_blank" rel="noopener">Pavilion</a></td>
+            <td>110</td>
+            <td>International students, International scholars, and families attached to those groups</td>
+          </tr>
+          <tr>
+            <td>Mays Business School - Undergraduate Programs</td>
+            <td><a href="https://aggiemap.tamu.edu/map/d?bldg=1510">Wehner</a></td>
+            <td>239</td>
+            <td>Mays Business Students</td>
+          </tr>
+          <tr>
+            <td>MSC Programs</td>
+            <td><a href="https://aggiemap.tamu.edu/?bldg=0454">Memorial Student Center</a></td>
+            <td>Suite 2240</td>
+            <td>All Students</td>
+          </tr>
+          <tr>
+            <td>Office for Student Success</td>
+            <td><a href="https://aggiemap.tamu.edu/?bldg=0424" target="_blank" rel="noopener">Hotard Hall</a></td>
+            <td></td>
+            <td>Varies</td>
+          </tr>
+          <tr>
+            <td>Psychological and Brain Sciences</td>
+            <td><a href="https://aggiemap.tamu.edu/?bldg=0420">Milner Hall</a></td>
+            <td>214</td>
+            <td>All Students</td>
+          </tr>
+          <tr>
+            <td>Residence Life</td>
+            <td><a href="https://aggiemap.tamu.edu/?bldg=1416" target="_blank" rel="noopener">Hullabaloo</a>
+              <p><a href="https://aggiemap.tamu.edu/?bldg=0440" target="_blank" rel="noopener">Commons</a></p>
+              <p><a href="https://aggiemap.tamu.edu/?bldg=1589">White Creek Apartments</a></p>
+              <p><a href="https://aggiemap.tamu.edu/?bldg=3198" target="_blank" rel="noopener">Gardens Apartments</a>
+              </p>
+            </td>
+            <td>24-hr Desk
+              <p>24-hr Desk</p>
+              <p>Activity Center</p>
+              <p>Community Center</p>
+            </td>
+            <td>On-campus residents</td>
+          </tr>
+          <tr>
+            <td>School of Education &amp; Human Development</td>
+            <td><a href="https://aggiemap.tamu.edu/?bldg=0435" target="_blank" rel="noopener">Harrington Tower</a>
+            </td>
+            <td>570</td>
+            <td>SEHD Undergraduate &amp; Graduates</td>
+          </tr>
+          <tr>
+            <td>School of Performance, Visualization, and Fine Arts</td>
+            <td><a href="https://aggiemap.tamu.edu/?bldg=0471">Pavilion</a></td>
+            <td>Suite 205</td>
+            <td>All students</td>
+          </tr>
+          <tr>
+            <td>School of Pharmacy</td>
+            <td><a href="https://aggiemap.tamu.edu/?bldg=1504" target="_blank" rel="noopener">Reynolds Medical
+                Sciences
+                Building</a></td>
+            <td>356</td>
+            <td>Varies</td>
+          </tr>
+          <tr>
+            <td>School of Public Health</td>
+            <td><a href="https://aggiemap.tamu.edu/?bldg=0473">Admin Building</a></td>
+            <td>1st Floor Breezeway, between rooms 155A and 1R</td>
+            <td>Varies</td>
+          </tr>
+          <tr>
+            <td>Student Activities</td>
+            <td><a href="https://aggiemap.tamu.edu/map/d?bldg=0383">Koldus</a></td>
+            <td>127D</td>
+            <td>All students</td>
+          </tr>
+          <tr>
+            <td>Student Life</td>
+            <td><a href="https://aggiemap.tamu.edu/?bldg=1546" target="_blank" rel="noopener">Student Services
+                Building</a></td>
+            <td>Suite 209</td>
+            <td>All students</td>
+          </tr>
+          <tr>
+            <td>University Health Services</td>
+            <td><a href="https://aggiemap.tamu.edu/?bldg=0520" target="_blank" rel="noopener">Beutel Health Center</a>
+            </td>
+            <td>Basement (across from Room 005)</td>
+            <td>All students</td>
+          </tr>
+          <tr>
+            <td>University Writing Center</td>
+            <td><a href="https://aggiemap.tamu.edu/?bldg=0468.1">Evans Library</a></td>
+            <td>1.214</td>
+            <td>All students</td>
+          </tr>
+          <tr>
+            <td>Veterinary Medicine &amp; Biomedical Sciences: Research &amp; Grad Students</td>
+            <td><a href="https://aggiemap.tamu.edu/?bldg=1812">VENI</a></td>
+            <td>317 M</td>
+            <td>BIMS Graduate &amp; Professional students</td>
+          </tr>
+          <tr>
+            <td>Veterinary Medicine &amp; Biomedical Sciences: Dean's Office</td>
+            <td><a href="https://aggiemap.tamu.edu/?bldg=1812">VENI</a>
+              <p><a href="https://aggiemap.tamu.edu/?bldg=1812">VENI</a></p>
+            </td>
+            <td>Under 1st Floor Stairwell
+              <p>317 M</p>
+            </td>
+            <td>Varies</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+
+    <div id="pie-chart-container" style="width: 100%; height: 400px;"></div>
+    <div id="score-bar-chart" style="width: 100%; height: 400px; margin-top: 40px;"></div>
+    <script>
+      Highcharts.chart('pie-chart-container', {
+        chart: { type: 'pie' },
+        title: { text: 'Distribution of Pocket Pantries by Type' },
+        series: [{
+          name: 'Pocket Pantries',
+          colorByPoint: true,
+          data: [
+            { name: 'All Students', y: 15 },
+            { name: 'Other Students', y: 11 },
+            { name: 'Varies', y: 5 }
+          ]
+        }]
+      });
+    </script>
+
+    <script>
+      Highcharts.chart('score-bar-chart', {
+        chart: { type: 'column' },
+        title: { text: 'Number of Buildings by Accessibility Score' },
+        xAxis: {
+          categories: [
+            'Poor (>750m)',
+            'Moderate (≤750m)',
+            'Good (≤500m)',
+            'Very Good (≤250m)',
+            'Excellent (≤100m)'
+          ],
+          title: { text: 'Accessibility Category' }
+        },
+        yAxis: {
+          min: 0,
+          title: { text: 'Number of Buildings' }
+        },
+        tooltip: {
+          pointFormat: '<b>{point.y} buildings</b>'
+        },
+        plotOptions: {
+          column: {
+            dataLabels: {
+              enabled: true,
+              format: '{y}'
+            }
+          }
+        },
+        colors: ['#4c72b0', '#55a868', '#c1c463', '#dd8452', '#c44e52'],
+        series: [{
+          name: 'Buildings',
+          data: [480, 124, 91, 125, 74]
+        }]
+      });
+    </script>
+
+
+    <li style="font-size: small;">Data visualization powered by Highcharts.</li>
+
+    <section>
+      <h2>Top Five Most Popular Pocket Pantries</h2>
+      <ol>
+        <li>Student Assistance Services – Student Services Building | Room 209 | Serving all students</li>
+        <li>MSC Programs – MSC | Room 1507 | Serving Student veterans & military-affiliated students</li>
+        <li>College of Arts and Sciences – Academic Building | Room 107 | Serving all students
+        </li>
+        <li>Academic Success Center – Pavilion | Room 236 | Serving varies
+        </li>
+        <li>Graduate and Professional School – Nagle Hall | Room 105 | Serving all graduate students
+        </li>
+      </ol>
+    </section>
+
+    <section>
+      <h2>Campus Accessibility Analysis</h2>
+      <p>
+        Campus Accessibility Analysis
+        To assess how effectively food resources are distributed across campus, our team developed a <strong> custom
+        accessibility scoring system </strong>based on spatial proximity. This analysis evaluates how easily individuals in
+        different campus buildings can reach the nearest Pocket Pantry, providing a clearer picture of service coverage
+        and potential gaps.
+        Using <strong>distance-based</strong> GIS analysis, we calculated the shortest walking distance from each major academic,
+        residential, and administrative building to the closest Pocket Pantry location. These distances were then
+        converted into an <strong>accessibility score</strong>, where shorter distances correspond to higher accessibility (i.e., easier
+        access to food resources).
+        The scoring helps identify areas of campus where pantry access is limited, highlighting opportunities for
+        expanding the program or introducing new support solutions. By grounding this analysis in geospatial data, we
+        ensure that future improvements to the pantry network are data-driven and equitable.
+
+      </p>
+      <a href="AccessibilityMap.html"
+        style="display:inline-block; background-color:#800000; color:#fff; padding:12px 18px; border-radius:5px; text-decoration:none;">Explore
+        Accessibility Map</a>
+    </section>
+
+    <section>
+      <h2>What Students Are Saying</h2>
+      <div style="font-style: italic; margin: 10px;">
+        <p>"The Pocket Pantries have been a lifesaver for me when times are tough!"</p>
+        <p>- A TAMU Student</p>
+      </div>
+      <div style="font-style: italic; margin: 10px;">
+        <p>"It’s comforting to know there’s help available right on campus."</p>
+        <p>- Another TAMU Student</p>
+      </div>
+    </section>
+
+    <section>
+      <h2>Frequently Asked Questions</h2>
+      <details>
+        <summary>What are Pocket Pantries?</summary>
+        <p>Small food pantries on campus that provide emergency support for students experiencing food insecurity.</p>
+      </details>
+      <details>
+        <summary>Who can use the Pocket Pantries?</summary>
+        <p>All TAMU students, staff, and military-affiliated individuals depending on the location.</p>
+      </details>
+      <details>
+        <summary>When do the Pocket Pantries restock?</summary>
+        <p>Each pantry gets two bulk restocks (Fall and Spring) and can request up to two more restocks during the
+          academic year.</p>
+      </details>
+      <details>
+        <summary>Who runs the Pocket Pantries?</summary>
+        <p>The program is led by Student Assistance Services and various student organizations, with coordinators at
+          each location.</p>
+      </details>
+    </section>
+
+    <section>
+      <h2>In the News: Pocket Pantries at Texas A&M</h2>
+      <p>Watch how the Pocket Pantry program is helping Aggies tackle food insecurity on campus.</p>
+      <div style="display: flex; justify-content: center; margin-top: 20px;">
+        <iframe width="560" height="315" src="https://www.youtube.com/embed/pifj3lysAqQ"
+          title="Pocket Pantries help address food insecurity on the Texas A&M campus" frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen></iframe>
+      </div>
+    </section>
+
+
+    <section style="background-color: #fff; padding: 20px; margin: 20px 0; border-radius: 10px;">
+      <h2 style="text-align: left; margin-bottom: 15px;">Other Resources</h2>
+      <div style="display: flex; justify-content: space-around; flex-wrap: wrap; text-align: center;">
+
+        <!-- Food Support -->
+        <div style="margin: 10px;">
+          <a href="https://studentlife.tamu.edu/support/food-resources" style="text-decoration: none; color: #800000;">
+            <img src="support.png" alt="Food Support" style="width: 100px; height: 100px; border-radius: 10px;"><br>
+            <span style="font-weight: bold; display: block; margin-top: 8px;">Student Life Food Resources</span>
+          </a>
+        </div>
+
+        <!-- Bus Routes -->
+        <div style="margin: 10px;">
+          <a href="https://aggiespirit.ts.tamu.edu/RouteMap" style="text-decoration: none; color: #800000;">
+            <img src="Bus.webp" alt="Bus Routes" style="width: 100px; height: 100px; border-radius: 10px;"><br>
+            <span style="font-weight: bold; display: block; margin-top: 8px;">Bus Routes Map</span>
+          </a>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="container">
+    &copy; 2025 Pocket Pantries Program. All rights reserved.
+  </footer>
+</body>
+
+</html>
